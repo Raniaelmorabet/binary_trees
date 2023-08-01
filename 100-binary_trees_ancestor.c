@@ -1,21 +1,23 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_ancestor - checks if a node is an ancestor of another
+ * binary_tree_is_ancestor - checks if a node is ancestor of another node
  * @node: pointer to the node to check
- * @ancestor: pointer to the ancestor node
+ * @ancestor: pointer to the node to find
  *
- * Return: 1 if node is an ancestor of ancestor, otherwise 0
+ * Return: 1 if node is ancestor of ancestor, otherwise 0
  */
 int binary_tree_is_ancestor(const binary_tree_t *node,
 			    const binary_tree_t *ancestor)
 {
-	if (!ancestor)
+	if (!node || !ancestor)
 		return (0);
+
 	if (node == ancestor)
 		return (1);
-	return (binary_tree_is_ancestor(node, ancestor->left) ||
-		binary_tree_is_ancestor(node, ancestor->right));
+
+	return (binary_tree_is_ancestor(node->left, ancestor) ||
+		binary_tree_is_ancestor(node->right, ancestor));
 }
 
 /**
@@ -33,14 +35,17 @@ binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 
 	if (!first || !second)
 		return (NULL);
+
 	if (first == second)
 		return ((binary_tree_t *)first);
-	ancestor = (binary_tree_t *)second;
+
+	ancestor = (binary_tree_t *)first;
 	while (ancestor)
 	{
-		if (binary_tree_is_ancestor(ancestor, first))
+		if (binary_tree_is_ancestor(ancestor, second))
 			return (ancestor);
 		ancestor = ancestor->parent;
 	}
+
 	return (NULL);
 }
